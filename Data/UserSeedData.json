@@ -4,8 +4,8 @@
     "Created": "2019-08-30",
     "Photos": [
       {
-        "url": "https://randomuser.me/api/portraits/women/95.jpg",
-        "isMain": true
+        "Url": "https://randomuser.me/api/portraits/women/95.jpg",
+        "IsMain": true
       }
     ]
   },
@@ -14,8 +14,8 @@
     "Created": "2019-06-15",
     "Photos": [
       {
-        "url": "https://randomuser.me/api/portraits/women/44.jpg",
-        "isMain": true
+        "Url": "https://randomuser.me/api/portraits/women/44.jpg",
+        "IsMain": true
       }
     ]
   },
@@ -24,8 +24,8 @@
     "Created": "2019-06-29",
     "Photos": [
       {
-        "url": "https://randomuser.me/api/portraits/women/5.jpg",
-        "isMain": true
+        "Url": "https://randomuser.me/api/portraits/women/5.jpg",
+        "IsMain": true
       }
     ]
   },
@@ -34,8 +34,8 @@
     "Created": "2019-08-08",
     "Photos": [
       {
-        "url": "https://randomuser.me/api/portraits/women/7.jpg",
-        "isMain": true
+        "Url": "https://randomuser.me/api/portraits/women/7.jpg",
+        "IsMain": true
       }
     ]
   },
@@ -44,8 +44,8 @@
     "Created": "2019-02-14",
     "Photos": [
       {
-        "url": "https://randomuser.me/api/portraits/women/97.jpg",
-        "isMain": true
+        "Url": "https://randomuser.me/api/portraits/women/97.jpg",
+        "IsMain": true
       }
     ]
   }

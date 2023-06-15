@@ -6,11 +6,11 @@ using API.Entities;
 
 namespace API.DTOs
 {
-    public class ProfileDto
+    public class ProductDto
     {
         public int Id { get; set; }
 
-        public string UserName { get; set; }
+        public string Description { get; set; }
 
         public DateTime Created { get; set; }
 

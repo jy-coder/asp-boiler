@@ -1,0 +1,44 @@
+[
+  {
+    "Id": 1,
+    "Description": "Product 1 description",
+    "Photos": [
+      {
+        "Url": "https://example.com/product1-photo1.jpg",
+        "isMain": true
+      },
+      {
+        "Url": "https://example.com/product1-photo2.jpg",
+        "isMain": false
+      }
+    ]
+  },
+  {
+    "Id": 2,
+    "Description": "Product 2 description",
+    "Photos": [
+      {
+        "Url": "https://example.com/product2-photo1.jpg",
+        "isMain": true
+      },
+      {
+        "Url": "https://example.com/product2-photo2.jpg",
+        "isMain": false
+      }
+    ]
+  },
+  {
+    "Id": 3,
+    "Description": "Product 3 description",
+    "Photos": [
+      {
+        "Url": "https://example.com/product3-photo1.jpg",
+        "isMain": true
+      },
+      {
+        "Url": "https://example.com/product3-photo2.jpg",
+        "isMain": false
+      }
+    ]
+  }
+]
