@@ -9,10 +9,13 @@ namespace API.Interfaces
 {
     public interface IProductRepository
     {
-        // void Update(Product product);
-        // Task<bool> SaveAllAsync();
-        // Task<IEnumerable<AppUser>> GetProductAsync();
-        Task<IEnumerable<Product>> GetProductsAsync();
+        void Update(Product product);
+        Task<bool> SaveAllAsync();
+
         Task<Product> GetProductByIdAsync(int id);
+        Task<IEnumerable<ProductDto>> GetProductsAsync();
+        Task<ProductDto> GetProductDtoByIdAsync(int id);
+
+
     }
 }
