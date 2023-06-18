@@ -10,10 +10,13 @@ namespace API.Entities
         public bool IsMain { get; set; }
         public string PublicId { get; set; }
 
-        public int? AppUserId { get; set; } // Nullable int
+        public int? AppUserId { get; set; }
         public AppUser AppUser { get; set; }
 
-        public int? ProductId { get; set; } // Nullable int
+        public int? ProductId { get; set; }
         public Product Product { get; set; }
+
+        public string AssociatedEntity { get; set; }
+
     }
 }
