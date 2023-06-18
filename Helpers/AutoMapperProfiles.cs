@@ -9,10 +9,16 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
+            CreateMap<Photo, PhotoDto>();
+            CreateMap<Category, CategoryDto>();
+            CreateMap<ProductUpdateDto, Product>();
+
             CreateMap<AppUser, ProfileDto>()
             .ForMember(dest => dest.PhotoUrl,
                 opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url));
-            CreateMap<Photo, PhotoDto>();
+            CreateMap<Product, ProductDto>()
+            .ForMember(dest => dest.PhotoUrl,
+                opt => opt.MapFrom(src => src.Photos.FirstOrDefault(x => x.IsMain).Url));
         }
     }
 }
