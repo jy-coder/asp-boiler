@@ -1,0 +1,38 @@
+[
+  {
+    "Id": 1,
+    "Name": "Vegetables"
+  },
+  {
+    "Id": 2,
+    "Name": "Fruits"
+  },
+  {
+    "Id": 3,
+    "Name": "Meat"
+  },
+  {
+    "Id": 4,
+    "Name": "Grains"
+  },
+  {
+    "Id": 5,
+    "Name": "Dairy"
+  },
+  {
+    "Id": 6,
+    "Name": "Seafood"
+  },
+  {
+    "Id": 7,
+    "Name": "Snacks"
+  },
+  {
+    "Id": 8,
+    "Name": "Beverages"
+  },
+  {
+    "Id": 9,
+    "Name": "Condiments"
+  }
+]
