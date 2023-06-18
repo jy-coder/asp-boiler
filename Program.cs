@@ -13,8 +13,6 @@ builder.Services.AddApplicationServices(builder.Configuration);
 builder.Services.AddIdentityServices(builder.Configuration);
 
 
-builder.Services.AddCors();
-builder.Services.AddScoped<ITokenService, TokenService>();
 var app = builder.Build();
 app.UseMiddleware<ExceptionMiddleware>();
 app.UseCors(options => options.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200"));
@@ -30,8 +28,12 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<DataContext>();
+    // await context.Database.EnsureDeletedAsync(); // Clear the database
     await context.Database.MigrateAsync();
+    await Seed.SeedCategories(context);
     await Seed.SeedUsers(context);
+    await Seed.SeedProducts(context);
+
 }
 catch (Exception ex)
 {
