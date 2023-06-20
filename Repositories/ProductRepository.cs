@@ -2,6 +2,7 @@
 
 using API.DTOs;
 using API.Entities;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -20,21 +21,26 @@ namespace API.Data
             _context = context;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetProductsAsync()
+        public async Task<PagedList<ProductDto>> GetProductsAsync(UserParams userParams)
         {
 
-            return await _context.Products
-            .Include(p => p.Photos)
-            .Include(p => p.Categories)
+            var query = _context.Products
             .AsSplitQuery()
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
-            .ToListAsync();
+            .AsNoTracking();
+
+            if (userParams.CategoryId.HasValue)
+            {
+                // Filter products by category
+                query = query.Where(p => p.Categories.Any(c => c.Id == userParams.CategoryId.Value));
+            }
+
+            return await PagedList<ProductDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
         }
+
         public async Task<ProductDto> GetProductDtoByIdAsync(int id)
         {
             return await _context.Products
-            .Include(p => p.Photos)
-            .Include(p => p.Categories)
             .Where(x => x.Id == id)
             .AsSplitQuery()
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
