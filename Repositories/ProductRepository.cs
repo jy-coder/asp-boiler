@@ -6,7 +6,7 @@ using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 namespace API.Data
 {
@@ -21,7 +21,7 @@ namespace API.Data
             _context = context;
         }
 
-        public async Task<PagedList<ProductDto>> GetProductsAsync(UserParams userParams)
+        public async Task<PagedList<ProductDto>> GetProductsAsync([FromQuery] ProductParams productParams)
         {
 
             var query = _context.Products
@@ -29,13 +29,14 @@ namespace API.Data
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
             .AsNoTracking();
 
-            if (userParams.CategoryId.HasValue)
+            if (!string.IsNullOrEmpty(productParams.CategoryIds))
             {
-                // Filter products by category
-                query = query.Where(p => p.Categories.Any(c => c.Id == userParams.CategoryId.Value));
+                var categoryIds = productParams.CategoryIds.Split(',').Select(int.Parse).ToList();
+
+                query = query.Where(p => p.Categories.Any(c => categoryIds.Contains(c.Id)));
             }
 
-            return await PagedList<ProductDto>.CreateAsync(query, userParams.PageNumber, userParams.PageSize);
+            return await PagedList<ProductDto>.CreateAsync(query, productParams.PageNumber, productParams.PageSize);
         }
 
         public async Task<ProductDto> GetProductDtoByIdAsync(int id)

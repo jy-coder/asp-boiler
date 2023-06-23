@@ -13,7 +13,7 @@ namespace API.Interfaces
         void Update(Product product);
         Task<bool> SaveAllAsync();
         Task<Product> GetProductByIdAsync(int id);
-        Task<PagedList<ProductDto>> GetProductsAsync(UserParams userParams);
+        Task<PagedList<ProductDto>> GetProductsAsync(ProductParams userParams);
         Task<ProductDto> GetProductDtoByIdAsync(int id);
     }
 }

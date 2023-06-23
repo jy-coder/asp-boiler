@@ -4,6 +4,17 @@ namespace API.Helpers
     {
         public string CurrentUsername { get; set; }
         public string OrderBy { get; set; } = "created";
-        public int? CategoryId { get; set; }
+
+    }
+
+
+    public class ProductParams : PaginationParams
+    {
+
+        public string CategoryIds { get; set; }
+
     }
 }
+
+
+
