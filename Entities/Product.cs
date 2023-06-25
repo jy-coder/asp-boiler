@@ -19,7 +19,6 @@ namespace API.Entities
 
         public List<ProductCategory> ProductCategories { get; set; } = new();
 
-        public List<Category> Categories { get; set; } = new();
 
         public List<Photo> Photos { get; set; } = new();
 

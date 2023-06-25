@@ -20,22 +20,21 @@ namespace API.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<Photo>()
-                .HasOne(p => p.AppUser)
-                .WithMany(u => u.Photos)
-                .HasForeignKey(p => p.AppUserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<ProductCategory>()
+                .HasKey(pc => new { pc.ProductId, pc.CategoryId });
 
-            modelBuilder.Entity<Photo>()
-                .HasOne(p => p.Product)
-                .WithMany(p => p.Photos)
-                .HasForeignKey(p => p.ProductId)
+            modelBuilder.Entity<ProductCategory>()
+                .HasOne(pc => pc.Product)
+                .WithMany(p => p.ProductCategories)
+                .HasForeignKey(pc => pc.ProductId)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<ProductCategory>()
-            .HasOne(pc => pc.Category)
-            .WithMany(c => c.ProductCategories)
-            .HasForeignKey(pc => pc.CategoryId);
+                .HasOne(pc => pc.Category)
+                .WithMany()
+                .HasForeignKey(pc => pc.CategoryId)
+                .OnDelete(DeleteBehavior.Cascade);
+
 
         }
 

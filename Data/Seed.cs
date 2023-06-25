@@ -55,18 +55,12 @@ namespace API.Data
                     context.Photos.Add(photo);
                 }
 
-                var categoryIds = product.Categories.Select(c => c.Id).ToList();
-                product.Categories = context.Categories
-                    .Where(c => categoryIds.Contains(c.Id))
-                    .ToList();
-
+                var categoryIds = product.ProductCategories.Select(pc => pc.CategoryId).ToList();
                 product.ProductCategories = categoryIds.Select(categoryId => new ProductCategory
                 {
                     ProductId = product.Id,
                     CategoryId = categoryId
                 }).ToList();
-
-
 
                 context.Products.Add(product);
             }

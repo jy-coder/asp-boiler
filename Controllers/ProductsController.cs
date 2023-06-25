@@ -47,24 +47,26 @@ namespace API.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateProduct(int id, [FromBody] ProductUpdateDto updatedProductDto)
         {
-            var existingProduct = await _productRepository.GetProductCategory(id);
+            var existingProduct = await _productRepository.GetProductByIdAsync(id);
             if (existingProduct == null)
             {
                 return NotFound();
             }
 
-
             var categoryIds = updatedProductDto.CategoryIds;
-            _productRepository.UpdateProductCategories(existingProduct, categoryIds);
+            await _productRepository.UpdateProductCategoriesAsync(existingProduct, categoryIds);
+
             _mapper.Map(updatedProductDto, existingProduct);
+            _productRepository.Update(existingProduct);
 
             if (await _productRepository.SaveAllAsync())
             {
-                _productRepository.Update(existingProduct);
                 return NoContent();
             }
+
             return BadRequest("Failed to update product");
         }
+
 
 
     }

@@ -10,14 +10,11 @@ namespace API.Entities
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public List<ProductCategory> ProductCategories { get; set; } = new();
     }
 
 
     public class ProductCategory
     {
-
-        public int Id { get; set; } // Primary key
 
         public int ProductId { get; set; }
         public Product Product { get; set; }

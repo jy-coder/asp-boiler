@@ -49,12 +49,7 @@ namespace API.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Categories");
                 });
@@ -117,43 +112,28 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.ProductCategory", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("ProductId")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
+                    b.HasKey("ProductId", "CategoryId");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("ProductId");
-
                     b.ToTable("ProductCategory");
-                });
-
-            modelBuilder.Entity("API.Entities.Category", b =>
-                {
-                    b.HasOne("API.Entities.Product", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("API.Entities.Photo", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "AppUser")
                         .WithMany("Photos")
-                        .HasForeignKey("AppUserId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("API.Entities.Product", "Product")
                         .WithMany("Photos")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("AppUser");
 
@@ -163,7 +143,7 @@ namespace API.Migrations
             modelBuilder.Entity("API.Entities.ProductCategory", b =>
                 {
                     b.HasOne("API.Entities.Category", "Category")
-                        .WithMany("ProductCategories")
+                        .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -184,15 +164,8 @@ namespace API.Migrations
                     b.Navigation("Photos");
                 });
 
-            modelBuilder.Entity("API.Entities.Category", b =>
-                {
-                    b.Navigation("ProductCategories");
-                });
-
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("Photos");
 
                     b.Navigation("ProductCategories");
