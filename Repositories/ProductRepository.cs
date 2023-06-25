@@ -42,6 +42,7 @@ namespace API.Data
         public async Task<ProductDto> GetProductDtoByIdAsync(int id)
         {
             return await _context.Products
+            .Include(p => p.Categories)
             .Where(x => x.Id == id)
             .AsSplitQuery()
             .ProjectTo<ProductDto>(_mapper.ConfigurationProvider)
@@ -51,7 +52,16 @@ namespace API.Data
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _context.Products.FindAsync(id);
+            return await _context.Products.AsNoTracking()
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        }
+
+        public async Task<Product> GetProductCategory(int id)
+        {
+            return await _context.Products
+                       .Include(p => p.ProductCategories)
+                       .FirstOrDefaultAsync(p => p.Id == id);
         }
 
 
@@ -64,5 +74,29 @@ namespace API.Data
         {
             _context.Entry(product).State = EntityState.Modified;
         }
+
+
+        public void UpdateProductCategories(Product product, List<int> categoryIds)
+        {
+
+            _context.ProductCategory.RemoveRange(product.ProductCategories);
+
+
+            foreach (var categoryId in categoryIds)
+            {
+                var category = _context.Categories.Find(categoryId);
+                if (category != null)
+                {
+                    product.ProductCategories.Add(new ProductCategory { Category = category });
+                }
+
+            }
+            _context.Update(product);
+            _context.SaveChanges();
+
+
+        }
+
+
     }
 }

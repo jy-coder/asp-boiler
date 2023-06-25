@@ -9,6 +9,7 @@ namespace API.DTOs
     public class ProductDto
     {
         public int Id { get; set; }
+
         public decimal Price { get; set; }
 
         public string Description { get; set; }
@@ -38,6 +39,9 @@ namespace API.DTOs
         public List<PhotoDto> Photos { get; set; }
 
         public List<CategoryDto> Categories { get; set; }
+
+        public List<int> CategoryIds { get; set; }
+
     }
 
 

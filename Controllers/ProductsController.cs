@@ -6,10 +6,8 @@ using API.Extensions;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
@@ -40,29 +38,33 @@ namespace API.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetProductById(int id)
+        public async Task<ActionResult<ProductDto>> GetProductById(int id)
         {
-            return await _productRepository.GetProductByIdAsync(id);
+            return await _productRepository.GetProductDtoByIdAsync(id);
 
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateProduct(int id, [FromBody] ProductUpdateDto updatedProductDto)
         {
-            var existingProduct = await _productRepository.GetProductByIdAsync(id);
-
+            var existingProduct = await _productRepository.GetProductCategory(id);
             if (existingProduct == null)
             {
                 return NotFound();
             }
 
+
+            var categoryIds = updatedProductDto.CategoryIds;
+            _productRepository.UpdateProductCategories(existingProduct, categoryIds);
             _mapper.Map(updatedProductDto, existingProduct);
 
-            if (await _productRepository.SaveAllAsync()) return NoContent();
-
+            if (await _productRepository.SaveAllAsync())
+            {
+                _productRepository.Update(existingProduct);
+                return NoContent();
+            }
             return BadRequest("Failed to update product");
         }
-
 
 
     }
