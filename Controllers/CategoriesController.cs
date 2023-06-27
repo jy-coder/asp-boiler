@@ -30,5 +30,22 @@ namespace API.Controllers
             Response.AddPaginationHeader(new PaginationHeader(categories.CurrentPage, categories.PageSize, categories.TotalCount, categories.TotalPages));
             return Ok(categories);
         }
+
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<CategoryDto>> GetCategoryById(int id)
+        {
+            var category = await _uow.CategoryRepository.GetCategoryByIdAsync(id);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var categoryDto = _mapper.Map<CategoryDto>(category);
+
+            return Ok(categoryDto);
+        }
+
     }
 }

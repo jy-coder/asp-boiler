@@ -11,10 +11,10 @@ namespace API.Interfaces
     public interface IProductRepository
     {
         void Update(Product product);
-        Task UpdateProductCategoriesAsync(Product product, List<int> categoryIds);
         Task<Product> GetProductByIdAsync(int id);
         Task<PagedList<ProductDto>> GetProductsAsync(ProductParams userParams);
         Task<ProductDto> GetProductDtoByIdAsync(int id);
         Task<Product> GetProductCategory(int id);
+        Task AddProductAsync(Product product);
     }
 }

@@ -1,6 +1,6 @@
 using API.DTOs;
+using API.DTOs.Product;
 using API.Entities;
-using API.Extensions;
 using AutoMapper;
 
 namespace API.Helpers
@@ -13,6 +13,7 @@ namespace API.Helpers
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();
             CreateMap<ProductUpdateDto, Product>();
+            CreateMap<ProductCreateDto, Product>();
 
             CreateMap<AppUser, ProfileDto>()
             .ForMember(dest => dest.PhotoUrl,

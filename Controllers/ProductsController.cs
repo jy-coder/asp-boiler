@@ -1,6 +1,6 @@
 
-using API.Data;
 using API.DTOs;
+using API.DTOs.Product;
 using API.Entities;
 using API.Extensions;
 using API.Helpers;
@@ -55,10 +55,14 @@ namespace API.Controllers
             }
 
             var categoryIds = updatedProductDto.CategoryIds;
-            await _uow.ProductRepository.UpdateProductCategoriesAsync(existingProduct, categoryIds);
-
-            _mapper.Map(updatedProductDto, existingProduct);
-            _uow.ProductRepository.Update(existingProduct);
+            existingProduct.ProductCategories.RemoveAll(pc => !categoryIds.Contains(pc.CategoryId));
+            var newCategoryIds = categoryIds.Except(existingProduct.ProductCategories.Select(pc => pc.CategoryId));
+            foreach (var categoryId in newCategoryIds)
+            {
+                existingProduct.ProductCategories.Add(new ProductCategory { CategoryId = categoryId });
+            }
+            var updatedProduct = _mapper.Map<ProductUpdateDto, Product>(updatedProductDto, existingProduct);
+            _uow.ProductRepository.Update(updatedProduct);
 
             if (await _uow.Complete())
             {
@@ -66,6 +70,29 @@ namespace API.Controllers
             }
 
             return BadRequest("Failed to update product");
+        }
+
+
+
+        [HttpPost]
+        public async Task<ActionResult<ProductDto>> CreateProduct([FromBody] ProductCreateDto productCreateDto)
+        {
+            var categoryIds = productCreateDto.CategoryIds;
+
+            var product = _mapper.Map<Product>(productCreateDto);
+
+            foreach (var categoryId in categoryIds)
+            {
+                var category = await _uow.CategoryRepository.GetCategoryByIdAsync(categoryId);
+                if (category != null)
+                {
+                    product.ProductCategories.Add(new ProductCategory { Category = category });
+                }
+            }
+
+            await _uow.ProductRepository.AddProductAsync(product);
+            if (await _uow.Complete()) return Ok(_mapper.Map<ProductDto>(product));
+            return BadRequest("Failed to send message");
         }
 
 

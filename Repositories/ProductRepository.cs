@@ -1,6 +1,7 @@
 
 
 using API.DTOs;
+using API.DTOs.Product;
 using API.Entities;
 using API.Helpers;
 using API.Interfaces;
@@ -51,7 +52,7 @@ namespace API.Data
 
         public async Task<Product> GetProductByIdAsync(int id)
         {
-            return await _context.Products.AsNoTracking()
+            return await _context.Products
             .Include(p => p.ProductCategories)
             .FirstOrDefaultAsync(p => p.Id == id);
 
@@ -65,31 +66,14 @@ namespace API.Data
         }
 
 
-
         public void Update(Product product)
         {
             _context.Entry(product).State = EntityState.Modified;
         }
 
-
-
-
-        public async Task UpdateProductCategoriesAsync(Product product, List<int> categoryIds)
+        public async Task AddProductAsync(Product product)
         {
-
-            _context.ProductCategory.RemoveRange(product.ProductCategories);
-
-            foreach (var categoryId in categoryIds)
-            {
-                var category = await _context.Categories.FindAsync(categoryId);
-                if (category != null)
-                {
-                    product.ProductCategories.Add(new ProductCategory { Category = category });
-                }
-            }
-
-            await _context.SaveChangesAsync();
-
+            await _context.Products.AddAsync(product);
         }
 
 

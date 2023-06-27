@@ -1,5 +1,6 @@
 using API.Data;
 using API.DTOs;
+using API.Entities;
 using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
@@ -22,6 +23,12 @@ namespace API.Repositories
         {
             var query = _context.Categories.ProjectTo<CategoryDto>(_mapper.ConfigurationProvider).AsQueryable();
             return await PagedList<CategoryDto>.CreateAsync(query, p.PageNumber, p.PageSize);
+        }
+
+
+        public async Task<Category> GetCategoryByIdAsync(int categoryId)
+        {
+            return await _context.Categories.FindAsync(categoryId);
         }
     }
 }
