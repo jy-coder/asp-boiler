@@ -12,7 +12,6 @@ namespace API.Interfaces
     {
         void Update(Product product);
         Task UpdateProductCategoriesAsync(Product product, List<int> categoryIds);
-        Task<bool> SaveAllAsync();
         Task<Product> GetProductByIdAsync(int id);
         Task<PagedList<ProductDto>> GetProductsAsync(ProductParams userParams);
         Task<ProductDto> GetProductDtoByIdAsync(int id);

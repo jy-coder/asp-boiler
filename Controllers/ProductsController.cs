@@ -13,13 +13,14 @@ namespace API.Controllers
 {
     public class ProductsController : BaseApiController
     {
-        private readonly IProductRepository _productRepository;
+
+        private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
 
-        public ProductsController(IProductRepository productRepository, IMapper mapper)
+        public ProductsController(IMapper mapper, IUnitOfWork uow)
         {
             _mapper = mapper;
-            _productRepository = productRepository;
+            _uow = uow;
         }
 
         [HttpGet]
@@ -31,7 +32,7 @@ namespace API.Controllers
                 var categoryIdsString = Request.Query["categoryIds"].ToString();
                 productParams.CategoryIds = categoryIdsString;
             }
-            var products = await _productRepository.GetProductsAsync(productParams);
+            var products = await _uow.ProductRepository.GetProductsAsync(productParams);
 
             Response.AddPaginationHeader(new PaginationHeader(products.CurrentPage, products.PageSize, products.TotalCount, products.TotalPages));
             return Ok(products);
@@ -40,26 +41,26 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetProductById(int id)
         {
-            return await _productRepository.GetProductDtoByIdAsync(id);
+            return await _uow.ProductRepository.GetProductDtoByIdAsync(id);
 
         }
 
         [HttpPut("{id}")]
         public async Task<ActionResult> UpdateProduct(int id, [FromBody] ProductUpdateDto updatedProductDto)
         {
-            var existingProduct = await _productRepository.GetProductByIdAsync(id);
+            var existingProduct = await _uow.ProductRepository.GetProductByIdAsync(id);
             if (existingProduct == null)
             {
                 return NotFound();
             }
 
             var categoryIds = updatedProductDto.CategoryIds;
-            await _productRepository.UpdateProductCategoriesAsync(existingProduct, categoryIds);
+            await _uow.ProductRepository.UpdateProductCategoriesAsync(existingProduct, categoryIds);
 
             _mapper.Map(updatedProductDto, existingProduct);
-            _productRepository.Update(existingProduct);
+            _uow.ProductRepository.Update(existingProduct);
 
-            if (await _productRepository.SaveAllAsync())
+            if (await _uow.Complete())
             {
                 return NoContent();
             }

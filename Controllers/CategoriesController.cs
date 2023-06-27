@@ -11,20 +11,21 @@ namespace API.Controllers
     public class CategoriesController : BaseApiController
     {
 
-        private readonly ICategoryRepository _categoryRepository;
+        private readonly IUnitOfWork _uow;
         private readonly IMapper _mapper;
 
-        public CategoriesController(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoriesController(IMapper mapper, IUnitOfWork uow)
         {
             _mapper = mapper;
-            _categoryRepository = categoryRepository;
+            _uow = uow;
         }
+
 
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories([FromQuery] PaginationParams p)
         {
-            var categories = await _categoryRepository.GetCategoriesAsync(p);
+            var categories = await _uow.CategoryRepository.GetCategoriesAsync(p);
 
             Response.AddPaginationHeader(new PaginationHeader(categories.CurrentPage, categories.PageSize, categories.TotalCount, categories.TotalPages));
             return Ok(categories);
