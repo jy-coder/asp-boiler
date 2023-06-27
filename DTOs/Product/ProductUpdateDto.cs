@@ -2,28 +2,26 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using API.DTOs;
 
-namespace API.Entities
+namespace API.DTOs.Product
 {
-    public class Product
+    public class ProductUpdateDto
     {
-        public int Id { get; set; }
+        public string Description { get; set; }
+
+        public decimal Price { get; set; }
 
         public string Name { get; set; }
-
-        public string Description { get; set; }
-        public decimal Price { get; set; }
 
         public DateTime Created { get; set; }
 
         public string PhotoUrl { get; set; }
 
-        public List<ProductCategory> ProductCategories { get; set; } = new();
+        public List<PhotoDto> Photos { get; set; }
 
+        public List<CategoryDto> Categories { get; set; }
 
-        public List<Photo> Photos { get; set; } = new();
-
+        public List<int> CategoryIds { get; set; }
 
     }
 }
