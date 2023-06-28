@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
 
     public class UsersController : BaseApiController
     {
@@ -26,10 +25,7 @@ namespace API.Controllers
             _uow = uow;
         }
 
-
-
-
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<ActionResult<PagedList<ProfileDto>>> GetUsers([FromQuery] UserParams userParams)
         {
