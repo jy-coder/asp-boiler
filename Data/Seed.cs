@@ -37,7 +37,7 @@ namespace API.Data
             {
 
                 user.UserName = user.UserName.ToLower();
-                await userManager.CreateAsync(user, "Pa$$w0rd");
+                await userManager.CreateAsync(user, "123456");
                 await userManager.AddToRoleAsync(user, "Member");
             }
 
@@ -46,7 +46,7 @@ namespace API.Data
                 UserName = "admin"
             };
 
-            await userManager.CreateAsync(admin, "Pa$$w0rd");
+            await userManager.CreateAsync(admin, "123456");
             await userManager.AddToRolesAsync(admin, new[] { "Admin", "Moderator" });
 
 

@@ -15,6 +15,11 @@ namespace API.Extensions
             services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireUppercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequiredLength = 1;
+
             })
                 .AddRoles<AppRole>()
                 .AddRoleManager<RoleManager<AppRole>>()
@@ -32,28 +37,8 @@ namespace API.Extensions
                         ValidateAudience = false
                     };
 
-                    options.Events = new JwtBearerEvents
-                    {
-                        OnMessageReceived = context => 
-                        {
-                            var accessToken = context.Request.Query["access_token"];
-
-                            var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
-                            {
-                                context.Token = accessToken;
-                            }
-
-                            return Task.CompletedTask;
-                        }
-                    };
                 });
 
-            services.AddAuthorization(opt => 
-            {
-                opt.AddPolicy("RequireAdminRole", policy => policy.RequireRole("Admin"));
-                opt.AddPolicy("ModeratePhotoRole", policy => policy.RequireRole("Admin", "Moderator"));
-            });
 
             return services;
         }
