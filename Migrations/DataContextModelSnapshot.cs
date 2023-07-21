@@ -153,13 +153,7 @@ namespace API.Migrations
                     b.Property<int?>("AppUserId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("AssociatedEntity")
-                        .HasColumnType("TEXT");
-
                     b.Property<bool>("IsMain")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("ProductId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("PublicId")
@@ -171,8 +165,6 @@ namespace API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Photos");
                 });
@@ -323,17 +315,9 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.Photo", b =>
                 {
-                    b.HasOne("API.Entities.AppUser", "AppUser")
+                    b.HasOne("API.Entities.AppUser", null)
                         .WithMany("Photos")
                         .HasForeignKey("AppUserId");
-
-                    b.HasOne("API.Entities.Product", "Product")
-                        .WithMany("Photos")
-                        .HasForeignKey("ProductId");
-
-                    b.Navigation("AppUser");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("API.Entities.ProductCategory", b =>
@@ -405,8 +389,6 @@ namespace API.Migrations
 
             modelBuilder.Entity("API.Entities.Product", b =>
                 {
-                    b.Navigation("Photos");
-
                     b.Navigation("ProductCategories");
                 });
 #pragma warning restore 612, 618

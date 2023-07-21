@@ -76,7 +76,19 @@ namespace API.Data
             await _context.Products.AddAsync(product);
         }
 
+        public void DeleteProduct(Product product)
+        {
+            var existingProduct = _context.Products.Find(product.Id);
+            if (existingProduct == null)
+            {
+                throw new ArgumentException("Product not found.");
+            }
 
+
+            // Perform the deletion
+            _context.Products.Remove(existingProduct);
+
+        }
 
 
     }
