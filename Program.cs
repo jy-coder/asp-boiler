@@ -24,6 +24,9 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
 using var scope = app.Services.CreateScope();
 
 var services = scope.ServiceProvider;
@@ -33,7 +36,7 @@ try
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
 
-    // await context.Database.EnsureDeletedAsync(); // Clear the database
+    await context.Database.EnsureDeletedAsync(); // Clear the database
     await context.Database.MigrateAsync();
     await Seed.SeedCategories(context);
     await Seed.SeedUsers(userManager, roleManager);
