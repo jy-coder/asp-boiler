@@ -95,7 +95,24 @@ namespace API.Controllers
             return BadRequest("Failed to send message");
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteProduct(int id)
+        {
+            var product = await _uow.ProductRepository.GetProductByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
+            _uow.ProductRepository.DeleteProduct(product);
+
+            if (await _uow.Complete())
+            {
+                return NoContent();
+            }
+
+            return BadRequest("Failed to delete product");
+        }
 
     }
 }
