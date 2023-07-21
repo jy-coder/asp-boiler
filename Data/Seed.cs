@@ -64,12 +64,6 @@ namespace API.Data
 
             foreach (var product in products)
             {
-                foreach (var photo in product.Photos)
-                {
-                    photo.AssociatedEntity = "Product";
-                    photo.ProductId = product.Id;
-                    context.Photos.Add(photo);
-                }
 
                 var categoryIds = product.ProductCategories.Select(pc => pc.CategoryId).ToList();
                 product.ProductCategories = categoryIds.Select(categoryId => new ProductCategory
