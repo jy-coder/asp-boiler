@@ -9,6 +9,9 @@ namespace API.Helpers
     {
         public AutoMapperProfiles()
         {
+
+            CreateMap<RegisterDto, AppUser>();
+
             CreateMap<Photo, PhotoDto>();
             CreateMap<Category, CategoryDto>();
             CreateMap<CategoryDto, Category>();
