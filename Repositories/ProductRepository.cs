@@ -84,8 +84,6 @@ namespace API.Data
                 throw new ArgumentException("Product not found.");
             }
 
-
-            // Perform the deletion
             _context.Products.Remove(existingProduct);
 
         }

@@ -41,7 +41,13 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ProductDto>> GetProductById(int id)
         {
-            return await _uow.ProductRepository.GetProductDtoByIdAsync(id);
+            var product = await _uow.ProductRepository.GetProductDtoByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(product);
 
         }
 
@@ -113,6 +119,9 @@ namespace API.Controllers
 
             return BadRequest("Failed to delete product");
         }
+
+
+
 
     }
 }

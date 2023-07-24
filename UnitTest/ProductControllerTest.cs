@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
 using API.Controllers;
 using API.DTOs;
 using API.DTOs.Product;
@@ -24,7 +22,6 @@ namespace API.UnitTest
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockMapper = new Mock<IMapper>();
-            // Set up HttpContext and HttpRequest for the controller
             var httpContext = new DefaultHttpContext();
             httpContext.Request.QueryString = new QueryString("?categoryIds=1,3,5");
             _controller = new ProductsController(_mockMapper.Object, _mockUnitOfWork.Object)
@@ -36,7 +33,6 @@ namespace API.UnitTest
             };
         }
 
-        // Test for GetProducts method
         [Fact]
         public async Task GetProducts_ReturnsOkObjectResult()
         {
@@ -63,7 +59,6 @@ namespace API.UnitTest
             Assert.Equal("Product 1", returnedProducts.FirstOrDefault()?.Name);
         }
 
-        // Test for GetProductById method
         [Fact]
         public async Task GetProductById_ReturnsOkObjectResult()
         {
@@ -75,13 +70,104 @@ namespace API.UnitTest
                 .ReturnsAsync(productDto);
 
             // Act
-            var result = await _controller.GetProductById(productId);
+            var actionResult = await _controller.GetProductById(productId);
+            var okResult = Assert.IsType<OkObjectResult>(actionResult.Result);
 
             // Assert
-            // var okResult = Assert.IsType<OkObjectResult>(result.Result);
-            // var returnedProduct = Assert.IsAssignableFrom<ProductDto>(okResult.Value);
-            // Assert.Equal(productId, returnedProduct.Id);
-            // Assert.Equal("Product 1", returnedProduct.Name);
+            var returnedProduct = Assert.IsAssignableFrom<ProductDto>(okResult.Value);
+            Assert.Equal(productId, returnedProduct.Id);
+            Assert.Equal("Product 1", returnedProduct.Name);
+        }
+
+
+        [Fact]
+        public async Task DeleteProduct_ReturnsNotFoundResult()
+        {
+            // Arrange
+            var productId = 1;
+            Product nullProduct = null;
+
+            _mockUnitOfWork.Setup(u => u.ProductRepository.GetProductByIdAsync(productId))
+                .ReturnsAsync(nullProduct);
+
+            // Act
+            var result = await _controller.DeleteProduct(productId);
+
+            // Assert
+            var notFoundResult = Assert.IsType<NotFoundResult>(result);
+            Assert.Equal(404, notFoundResult.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateProduct_ReturnsNoContentResult()
+        {
+            // Arrange
+            var productId = 1;
+            var updatedProductDto = new ProductUpdateDto
+            {
+                CategoryIds = new List<int> { 1, 2, 3 }
+            };
+            var existingProduct = new Product
+            {
+                Id = productId,
+                Name = "Product 1",
+                ProductCategories = new List<ProductCategory>
+                {
+                    new ProductCategory { CategoryId = 1 },
+                    new ProductCategory { CategoryId = 4 }
+                }
+            };
+
+            _mockUnitOfWork.Setup(u => u.ProductRepository.GetProductByIdAsync(productId))
+                .ReturnsAsync(existingProduct);
+            _mockUnitOfWork.Setup(u => u.Complete())
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.UpdateProduct(productId, updatedProductDto);
+
+            // Assert
+            var noContentResult = Assert.IsType<NoContentResult>(result);
+            Assert.Equal(204, noContentResult.StatusCode);
+        }
+
+
+        [Fact]
+        public async Task CreateProduct_ReturnsOkObjectResult()
+        {
+            // Arrange
+            var productCreateDto = new ProductCreateDto
+            {
+                Name = "New Product",
+                Price = 9.99M,
+                Description = "Product description",
+                CategoryIds = new List<int> { 1, 2, 3 }
+            };
+            var product = new Product
+            {
+                Id = 1,
+                Name = productCreateDto.Name,
+                Price = productCreateDto.Price,
+                Description = productCreateDto.Description,
+                ProductCategories = new List<ProductCategory>(),
+                PhotoUrl = "https://example.com/photos/1.jpg"
+            };
+
+            _mockMapper.Setup(m => m.Map<Product>(productCreateDto)).Returns(product);
+            _mockUnitOfWork.Setup(u => u.CategoryRepository.GetCategoryByIdAsync(It.IsAny<int>()))
+                .ReturnsAsync((int categoryId) => new Category { Id = categoryId });
+
+            _mockUnitOfWork.Setup(u => u.ProductRepository.AddProductAsync(product))
+                .Returns(Task.CompletedTask);
+            _mockUnitOfWork.Setup(u => u.Complete())
+                .ReturnsAsync(true);
+
+            // Act
+            var result = await _controller.CreateProduct(productCreateDto);
+
+            // // Assert
+            var okResult = Assert.IsType<ActionResult<ProductDto>>(result);
+
         }
     }
 }
